@@ -1,22 +1,35 @@
 import React from "react";
-import { SimpleTable } from "./SimpleTable";
-import { makeData, Person } from "./makeData";
+import { Button } from "react-bootstrap";
+import { ToastProvider, useToasts } from "./ToastManager";
 
-const columns = [
-  { accessor: "id", Header: "ID" },
-  { accessor: "name", Header: "Name" },
-  { accessor: "billingAddress", Header: "Billing Address" },
-  { accessor: "phoneNumber", Header: "Phone Number" },
-  { accessor: "email", Header: "Email" },
-];
-
-function App() {
-  const data: Person[] = makeData(100); // Generate 10 rows of data
+const ToastDemo: React.FC = () => {
+  const { addToast } = useToasts();
 
   return (
-    <div className="App">
-      <SimpleTable columns={columns} data={data} />
+    <div>
+      {["warning", "info", "success", "danger"].map((variant) => (
+        <Button
+          key={variant}
+          variant={variant}
+          className="me-2"
+          onClick={() =>
+            addToast(`This is a ${variant} message!`, variant as any)
+          }
+        >
+          Show {variant} Toast
+        </Button>
+      ))}
     </div>
+  );
+};
+
+function App() {
+  return (
+    <ToastProvider>
+      <div className="m-4">
+        <ToastDemo />
+      </div>
+    </ToastProvider>
   );
 }
 
